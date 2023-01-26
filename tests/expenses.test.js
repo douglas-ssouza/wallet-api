@@ -33,3 +33,30 @@ describe('Testing GET endpoints', function () {
   });
 });
 
+describe('Testing POST endpoints', function () {
+  beforeEach(function () {
+    sinon.stub(connection, 'execute').resolves([{ insertId: 53 }]);
+  });
+
+  afterEach(function () {
+    sinon.restore();
+  });
+
+  it('returns status 201', async function () {
+    const response = await chai
+      .request(app)
+      .post('/expenses')
+      .send(expenses.NEW_EXPENSE);
+
+    expect(response).to.have.status(201);
+  });
+
+  it('returns the message with the id inserted', async function () {
+    const response = await chai
+      .request(app)
+      .post('/expenses')
+      .send(expenses.NEW_EXPENSE);
+    
+      expect(response.body).to.deep.equal({ message: 'Expense successfully posted with id 53' });
+  });
+});
