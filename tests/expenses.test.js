@@ -156,3 +156,29 @@ describe('Testing PUT endpoints', function () {
     });
   });
 });
+
+describe('Testing DELETE endpoints', function () {
+  describe('When id is found', function () {
+    it('returns status 200', async function () {
+      const response = await chai.request(app).delete('/expenses/1');
+      expect(response).to.have.status(200);
+    });
+
+    it('returns message "Expense deleted successfully."', async function () {
+      const response = await chai.request(app).delete('/expenses/1');
+      expect(response.body).to.deep.equal({ message: 'Expense deleted successfully.' });
+    });
+  });
+
+  describe('When id is not found', function () {
+    it('returns status 404', async function () {
+      const response = await chai.request(app).delete('/expenses/111');
+      expect(response).to.have.status(404);
+    });
+
+    it('returns message "Expense not found."', async function () {
+      const response = await chai.request(app).delete('/expenses/111');
+      expect(response.body).to.deep.equal({ message: 'Expense not found.' });
+    });
+  });
+});
