@@ -22,3 +22,5 @@ services:
       MYSQL_DATABASE: walletdb
     ports:
       - "33060:3306"
+    volumes:
+      - ./wallet_script.sql:/docker-entrypoint-initdb.d/wallet_script.sql
