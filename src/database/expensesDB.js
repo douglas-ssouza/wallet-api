@@ -24,9 +24,15 @@ function update(id, expense) {
   return connection.execute(query, [name, description, value, id]);
 }
 
+function remove(id) {
+  const query = 'DELETE FROM expenses WHERE id = ?';
+  return connection.execute(query, [id]);
+}
+
 module.exports = {
   findAll,
   findById,
   insert,
   update,
+  remove,
 };

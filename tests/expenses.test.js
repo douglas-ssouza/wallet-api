@@ -159,6 +159,14 @@ describe('Testing PUT endpoints', function () {
 
 describe('Testing DELETE endpoints', function () {
   describe('When id is found', function () {
+    beforeEach(function () {
+      sinon.stub(connection, 'execute').resolves([{ affectedRows: 1 }]);
+    });
+
+    afterEach(function () {
+      sinon.restore();
+    });
+
     it('returns status 200', async function () {
       const response = await chai.request(app).delete('/expenses/1');
       expect(response).to.have.status(200);
@@ -171,6 +179,14 @@ describe('Testing DELETE endpoints', function () {
   });
 
   describe('When id is not found', function () {
+    beforeEach(function () {
+      sinon.stub(connection, 'execute').resolves([{ affectedRows: 0 }]);
+    });
+
+    afterEach(function () {
+      sinon.restore();
+    });
+
     it('returns status 404', async function () {
       const response = await chai.request(app).delete('/expenses/111');
       expect(response).to.have.status(404);

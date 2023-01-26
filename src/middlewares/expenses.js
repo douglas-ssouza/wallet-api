@@ -55,9 +55,26 @@ async function update(req, res) {
   }
 }
 
+async function remove(req, res) {
+  const { id } = req.params;
+
+  try {
+    const [result] = await expensesDB.remove(id);
+
+    if (result.affectedRows) {
+      return res.status(200).json({ message: 'Expense deleted successfully.' });
+    }
+
+    return res.status(404).json({ message: 'Expense not found.' });
+  } catch (err) {
+    return res.status(500).json({ message: err.message });
+  }
+}
+
 module.exports = {
   findAll,
   findById,
   insert,
   update,
+  remove,
 };
