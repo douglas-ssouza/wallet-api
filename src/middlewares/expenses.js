@@ -38,8 +38,26 @@ async function insert(req, res) {
   }
 }
 
+async function update(req, res) {
+  const { id } = req.params;
+  const expense = req.body;
+
+  try {
+    const [result] = await expensesDB.update(id, expense);
+
+    if (result.affectedRows) {
+      return res.status(200).json({ message: 'Expense updated successfully.' });
+    }
+
+    return res.status(404).json({ message: 'Expense not found.' });
+  } catch (err) {
+    return res.status(500).json({ message: err.message });
+  }
+}
+
 module.exports = {
   findAll,
   findById,
   insert,
+  update,
 };

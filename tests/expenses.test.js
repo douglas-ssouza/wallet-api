@@ -105,8 +105,16 @@ describe('Testing POST endpoints', function () {
 
 describe('Testing PUT endpoints', function () {
   describe('When id is found', function () {
+    beforeEach(function () {
+      sinon.stub(connection, 'execute').resolves([{ affectedRows: 1 }]);
+    });
+
+    afterEach(function () {
+      sinon.restore();
+    });
+
     it('returns status 200', async function () {
-      const response = chai
+      const response = await chai
         .request(app)
         .put('/expenses/1')
         .send(expenses.NEW_EXPENSE);
@@ -114,7 +122,7 @@ describe('Testing PUT endpoints', function () {
     });
 
     it('returns message "Expense updated successfully"', async function () {
-      const response = chai
+      const response = await chai
         .request(app)
         .put('/expenses/1')
         .send(expenses.NEW_EXPENSE);
@@ -123,8 +131,16 @@ describe('Testing PUT endpoints', function () {
   });
 
   describe('When id is not found', function () {
+    beforeEach(function () {
+      sinon.stub(connection, 'execute').resolves([{ affectedRows: 0 }]);
+    });
+
+    afterEach(function () {
+      sinon.restore();
+    });
+
     it('returns status 404', async function () {
-      const response = chai
+      const response = await chai
         .request(app)
         .put('/expenses/111')
         .send(expenses.NEW_EXPENSE);
@@ -132,9 +148,9 @@ describe('Testing PUT endpoints', function () {
     });
 
     it('returns message "Expense not found."', async function () {
-      const response = chai
+      const response = await chai
         .request(app)
-        .put('/expenses/1')
+        .put('/expenses/111')
         .send(expenses.NEW_EXPENSE);
       expect(response.body).to.deep.equal({ message: 'Expense not found.' });
     });

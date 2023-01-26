@@ -17,8 +17,16 @@ function insert(expense) {
   return connection.execute(query, [name, description, value]);
 }
 
+function update(id, expense) {
+  const { name, description, value } = expense;
+
+  const query = 'UPDATE expenses SET name = ?, description = ?, value = ? WHERE id = ?';
+  return connection.execute(query, [name, description, value, id]);
+}
+
 module.exports = {
   findAll,
   findById,
   insert,
+  update,
 };
