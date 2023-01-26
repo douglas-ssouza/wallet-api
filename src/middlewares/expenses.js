@@ -1,15 +1,15 @@
 const expensesDB = require('../database/expensesDB');
 
-async function findAll(_req, res) {
+async function findAll(_req, res, next) {
   try {
     const [result] = await expensesDB.findAll();
     return res.status(200).json(result);
   } catch (err) {
-    return res.status(500).json({ message: err.message });
+    return next(err);
   }
 }
 
-async function findById(req, res) {
+async function findById(req, res, next) {
   const { id } = req.params;
 
   try {
@@ -21,11 +21,11 @@ async function findById(req, res) {
 
     return res.status(404).json({ message: 'Expense not found.' });
   } catch (err) {
-    return res.status(500).json({ message: err.message });
+    return next(err);
   }
 }
 
-async function insert(req, res) {
+async function insert(req, res, next) {
   const expense = req.body;
 
   try {
@@ -34,11 +34,11 @@ async function insert(req, res) {
       .status(201)
       .json({ message: `Expense successfully posted with id ${result.insertId}` });
   } catch (err) {
-    return res.status(500).json({ message: err.message });
+    return next(err);
   }
 }
 
-async function update(req, res) {
+async function update(req, res, next) {
   const { id } = req.params;
   const expense = req.body;
 
@@ -51,11 +51,11 @@ async function update(req, res) {
 
     return res.status(404).json({ message: 'Expense not found.' });
   } catch (err) {
-    return res.status(500).json({ message: err.message });
+    return next(err);
   }
 }
 
-async function remove(req, res) {
+async function remove(req, res, next) {
   const { id } = req.params;
 
   try {
@@ -67,7 +67,7 @@ async function remove(req, res) {
 
     return res.status(404).json({ message: 'Expense not found.' });
   } catch (err) {
-    return res.status(500).json({ message: err.message });
+    return next(err);
   }
 }
 

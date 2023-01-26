@@ -15,4 +15,9 @@ app.use('/expenses', expensesRouter);
 
 app.use((_req, res) => res.status(404).json({ message: 'Route not found.' }));
 
+app.use((error, _req, res, _next) => {
+  console.log(error);
+  return res.status(500).json({ error: error.message });
+});
+
 module.exports = app;
