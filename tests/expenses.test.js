@@ -31,6 +31,48 @@ describe('Testing GET endpoints', function () {
       expect(response.body).to.deep.equal(expenses.ALL_EXPENSES);
     });
   });
+
+  describe('Testing "/expenses/:id" route', function () {
+    describe('When id is found', function () {
+      beforeEach(function () {
+        sinon.stub(connection, 'execute').resolves([[expenses.ALL_EXPENSES[0]]]);
+      });
+
+      afterEach(function () {
+        sinon.restore();
+      });
+
+      it('returns status 200', async function () {
+        const response = await chai.request(app).get('/expenses/1');
+        expect(response).to.have.status(200);
+      });
+
+      it('returns the expense', async function () {
+        const response = await chai.request(app).get('/expenses/1');
+        expect(response.body).to.deep.equal(expenses.ALL_EXPENSES[0]);
+      });
+    });
+
+    describe('When id is not found', function () {
+      beforeEach(function () {
+        sinon.stub(connection, 'execute').resolves([[]]);
+      });
+
+      afterEach(function () {
+        sinon.restore();
+      });
+
+      it('returns status 404', async function () {
+        const response = await chai.request(app).get('/expenses/111');
+        expect(response).to.have.status(404);
+      });
+
+      it('return message "Expense not found."', async function () {
+        const response = await chai.request(app).get('/expenses/111');
+        expect(response.body).to.deep.equal({ message: 'Expense not found.' });
+      });
+    });
+  });
 });
 
 describe('Testing POST endpoints', function () {

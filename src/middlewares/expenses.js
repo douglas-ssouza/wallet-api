@@ -9,6 +9,22 @@ async function findAll(_req, res) {
   }
 }
 
+async function findById(req, res) {
+  const { id } = req.params;
+
+  try {
+    const [[result]] = await expensesDB.findById(id);
+
+    if (result) {
+      return res.status(200).json(result);
+    }
+
+    return res.status(404).json({ message: 'Expense not found.' });
+  } catch (err) {
+    return res.status(500).json({ message: err.message });
+  }
+}
+
 async function insert(req, res) {
   const expense = req.body;
 
@@ -24,5 +40,6 @@ async function insert(req, res) {
 
 module.exports = {
   findAll,
+  findById,
   insert,
 };
